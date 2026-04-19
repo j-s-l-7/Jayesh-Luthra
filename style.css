@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ffffff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Varela Round', sans-serif;
+}
+
+.container {
+    display: flex;
+    align-items: baseline;
+    gap: 8px; /* Space between text and dots */
+}
+
+.assembling-text {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #ffffff;
+    /* Create the "double character" effect with white fill and gray/black boundary */
+    -webkit-text-stroke: 1.5px #555555;
+    text-stroke: 1.5px #555555;
+    letter-spacing: 5px;
+}
+
+.dots-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Adjusting to sit right beside the text's baseline natively */
+    margin-bottom: 12px; 
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    /* Matches the boundaries of the text */
+    border: 1.5px solid #555555;
+    /* Small square with rounded corners */
+    border-radius: 6px;
+    /* Animation for the "mechanic" assembling feel */
+    animation: bounce 1.5s infinite;
+}
+
+/* Delay for each dot to create a sequence */
+.dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(-15px);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .assembling-text {
+        font-size: 3rem;
+        -webkit-text-stroke: 2px #555555;
+    }
+    .dot {
+        width: 14px;
+        height: 14px;
+        border: 2px solid #555555;
+        border-radius: 4px;
+    }
+    .dots-wrapper {
+        gap: 6px;
+    }
+}
