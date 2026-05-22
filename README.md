@@ -39,19 +39,28 @@ restyles their content.
 
 ## Deployment
 
-This repo is connected to Vercel via the Git integration. Every push to `main`
-triggers an auto-redeploy. No manual step needed.
+This repo deploys to **GitHub Pages** via `.github/workflows/pages.yml`. Every
+push to `main` triggers the workflow, which uploads the repo root as a static
+site artifact and publishes it to Pages. The `CNAME` file points the site at
+`jayeshluthra.com`. No build step.
 
-`deploy.py` is kept around for one-off manual deploys (e.g. if you ever
-disconnect Git integration); it uses the Vercel REST API with a token.
+`deploy.py` is kept around as a fallback for one-off manual deploys via the
+Vercel REST API.
 
 ## Required setup (one-time)
 
-1. **Connect this repo to Vercel** via the Vercel dashboard → Add New Project →
-   Import `j-s-l-7/Jayesh-Luthra`. No framework, no build step.
-2. **Create a GitHub PAT** with `contents: write` scope on this repo (a
-   fine-grained PAT limited to this single repo is recommended).
-3. **Add the PAT as `JAYESH_LUTHRA_PAT`** to both agent repos' Actions secrets:
+1. **Enable Pages** in repo Settings → Pages → Build and deployment → Source:
+   "GitHub Actions". Custom domain auto-detects from the `CNAME` file in the
+   repo root; tick "Enforce HTTPS" once the cert provisions (~10 min).
+2. **DNS** at your registrar — point `jayeshluthra.com` at GitHub Pages:
+   - Apex `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
+     `185.199.111.153`.
+   - Optional `AAAA` (IPv6): `2606:50c0:8000::153`, `2606:50c0:8001::153`,
+     `2606:50c0:8002::153`, `2606:50c0:8003::153`.
+   - `www` CNAME → `j-s-l-7.github.io`.
+3. **Create a GitHub PAT** with `contents: write` scope on this repo
+   (fine-grained, limited to this single repo).
+4. **Add the PAT as `JAYESH_LUTHRA_PAT`** to both agent repos' Actions secrets:
    - `j-s-l-7/Leading-Indicators` → Settings → Secrets → Actions
    - `j-s-l-7/Distribution-Research---Analyez` → Settings → Secrets → Actions
 
