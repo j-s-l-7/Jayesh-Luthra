@@ -1,26 +1,50 @@
 import urllib.request
 import urllib.parse
 import json
+import os
 import ssl
 
 TOKEN = "vca_6sPp7HfBNfmAP0PhtN05vNy0b9JBE6avhcPAIyE9vq2jgO5oSP4M8T2J"
 PROJECT_NAME = "jayeshs-personal-site"
 
-def read_file(name):
-    with open(name, "r") as f:
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def read_file(rel_path):
+    with open(os.path.join(HERE, rel_path), "r") as f:
         return f.read()
+
+
+def collect_report_files():
+    """Walk reports/ and include every HTML + the manifest.
+
+    Each entry maps the on-disk relative path to the same path in the
+    Vercel deployment, so reports/leading-indicators/2026-05-22.html stays at
+    that URL.
+    """
+    files = []
+    reports_dir = os.path.join(HERE, "reports")
+    if not os.path.isdir(reports_dir):
+        return files
+    for root, _dirs, names in os.walk(reports_dir):
+        for name in names:
+            if name.startswith("."):
+                continue
+            abs_path = os.path.join(root, name)
+            rel = os.path.relpath(abs_path, HERE).replace(os.sep, "/")
+            if not (rel.endswith(".html") or rel.endswith(".json")):
+                continue
+            with open(abs_path, "r") as f:
+                files.append({"file": rel, "data": f.read()})
+    return files
+
 
 payload = {
     "name": PROJECT_NAME,
     "files": [
-        {
-            "file": "index.html",
-            "data": read_file("index.html")
-        },
-        {
-            "file": "style.css",
-            "data": read_file("style.css")
-        }
+        {"file": "index.html", "data": read_file("index.html")},
+        {"file": "style.css", "data": read_file("style.css")},
+        *collect_report_files(),
     ],
     "projectSettings": {
         "framework": None
