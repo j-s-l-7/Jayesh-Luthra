@@ -4,10 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="light only">
+    <meta name="description" content="Jayesh Luthra. Opening February 6, 2027.">
     <title>Jayesh Luthra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        html, body { margin: 0; height: 100%; background: #fff; }
+        :root {
+            --ink: #1d1d1f;
+            --muted: #6e6e73;
+            --faint: #a1a1a6;
+            --bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+            animation: rise 1.4s cubic-bezier(.2, .7, .2, 1) both;
+        }
+
+        h1 {
+            font-size: clamp(44px, 8vw, 72px);
+            font-weight: 600;
+            letter-spacing: -0.035em;
+            line-height: 1.05;
+            margin: 0 0 28px;
+        }
+
+        p {
+            font-size: clamp(17px, 2.2vw, 21px);
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+            color: var(--muted);
+            margin: 0 0 14px;
+        }
+
+        .date {
+            margin-top: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+
+        .rule {
+            width: 32px;
+            height: 1px;
+            background: var(--faint);
+            margin: 40px auto 0;
+        }
+
+        footer {
+            position: fixed;
+            bottom: max(24px, env(safe-area-inset-bottom));
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.02em;
+            color: var(--faint);
+            animation: fade 2s ease 0.8s both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            main, footer { animation: none; }
+        }
     </style>
 </head>
-<body></body>
+<body>
+    <main>
+        <h1>Hey there.</h1>
+        <p>You've arrived a little early.</p>
+        <p>Something is being thoughtfully built here, and it isn't quite ready to be seen. Thank you for stopping by.</p>
+        <div class="rule"></div>
+        <p class="date">Opening February 6, 2027</p>
+    </main>
+    <footer>Jayesh Luthra</footer>
+</body>
 </html>
