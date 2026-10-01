@@ -20,47 +20,22 @@ It is a single static HTML file with no build step and no framework, hosted for 
 
 ```
 .
-├── index.html               # The whole page: markup + inline CSS
-├── reports/                 # Agent reports, published as-is (see below)
-│   ├── manifest.json        # Index of report dates per agent
-│   ├── leading-indicators/  # YYYY-MM-DD.html
-│   └── research-agent/      # YYYY-MM-DD.html
-├── CNAME                    # Custom domain for GitHub Pages
-├── .nojekyll                # Serve files as-is (skip Jekyll)
-└── .github/workflows/
-    └── pages.yml            # Deploy to GitHub Pages on every push to main
+├── index.html                  # The whole site: markup + inline CSS
+└── .github/workflows/pages.yml # Deploys to GitHub Pages on every push to main
 ```
 
 ## Deployment
 
-Every push to `main` runs [`pages.yml`](.github/workflows/pages.yml), which:
-
-1. Copies **only** the public files (`index.html`, `reports/`, `CNAME`, `.nojekyll`) into `_site/`.
-2. Publishes `_site/` to GitHub Pages.
-
-Nothing else in the repo (README, workflows) is ever served. A deploy takes about 30 seconds, and the latest run is shown in the badge above.
+Every push to `main` runs [`pages.yml`](.github/workflows/pages.yml), which publishes **only** `index.html` to GitHub Pages. The README and workflow files are never served. A deploy takes about 20 seconds, and the latest run is shown in the badge above.
 
 ### Hosting setup (already done)
 
 | Setting | Value |
 | --- | --- |
 | Pages source | GitHub Actions |
-| Custom domain | `jayeshluthra.com` (HTTPS enforced) |
+| Custom domain | `jayeshluthra.com`, set in repo Settings → Pages (HTTPS enforced) |
 | DNS (GoDaddy) apex `A` | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
 | DNS (GoDaddy) `www` `CNAME` | `j-s-l-7.github.io` |
-
-## Agent reports
-
-Two automated agents publish daily reports into this repo:
-
-| Agent | Repo | Published at |
-| --- | --- | --- |
-| Leading Indicators | `j-s-l-7/Leading-Indicators` | `jayeshluthra.com/reports/leading-indicators/YYYY-MM-DD.html` |
-| Research Agent | `j-s-l-7/Distribution-Research---Analyez` | `jayeshluthra.com/reports/research-agent/YYYY-MM-DD.html` |
-
-After each run, the agent's workflow uses the `JAYESH_LUTHRA_PAT` secret to commit its report to `reports/<agent>/`, update `reports/manifest.json`, and push to `main`. That push triggers a deploy. Reports are self-contained HTML and keep their own styling.
-
-The homepage does not link to the reports until launch. They are still reachable by direct URL.
 
 ## Editing the page
 
