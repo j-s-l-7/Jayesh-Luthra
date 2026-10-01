@@ -1,77 +1,73 @@
-# Jayesh Luthra — Personal Landing Page
+# jayeshluthra.com
 
-A minimalist landing page for [jayeshluthra.com](https://jayeshluthra.com). The
-hero shows **"making machines"** with a bouncing-dots loader. Below the hero,
-two columns — **Leading Indicators** and **Research Agent** — list dated links
-to the reports those two cron-driven agents produce. Each link opens that day's
-full report (the agent's own design, untouched).
+[![Deploy](https://github.com/j-s-l-7/Jayesh-Luthra/actions/workflows/pages.yml/badge.svg)](https://github.com/j-s-l-7/Jayesh-Luthra/actions/workflows/pages.yml)
+[![Live](https://img.shields.io/badge/live-jayeshluthra.com-1d1d1f)](https://jayeshluthra.com)
 
-## File structure
+The personal site of Jayesh Luthra. It currently shows a minimal greeting page and **opens on February 6, 2027**.
+
+It is a single static HTML file with no build step and no framework, hosted for free on GitHub Pages.
+
+---
+
+## Design
+
+- **Minimal by intent.** White page, near-black type, soft grey supporting text, and lots of empty space.
+- **System typography.** Apple's San Francisco font on Apple devices, with [Inter](https://rsms.me/inter/) as a near-identical fallback everywhere else.
+- **Fluid on every screen.** Type and spacing scale with both viewport width and height (`clamp()` + `min(vw, vh)`), so it reads well on small phones, landscape phones, tablets and desktops. Content stays clear of the iPhone notch and home bar.
+- **Accessible motion.** A gentle fade-in that is switched off for visitors whose device is set to reduce motion.
+
+## Repository layout
 
 ```
 .
-├── index.html                  # hero + two-column index that reads manifest.json
-├── style.css                   # tokens, hero, columns
-├── deploy.py                   # legacy: direct Vercel API deploy (kept for manual pushes)
-└── reports/
-    ├── manifest.json           # { "leading-indicators": [...], "research-agent": [...] }
-    ├── leading-indicators/     # YYYY-MM-DD.html files pushed by the LI workflow
-    └── research-agent/         # YYYY-MM-DD.html files pushed by the RA workflow
+├── index.html               # The whole page: markup + inline CSS
+├── reports/                 # Agent reports, published as-is (see below)
+│   ├── manifest.json        # Index of report dates per agent
+│   ├── leading-indicators/  # YYYY-MM-DD.html
+│   └── research-agent/      # YYYY-MM-DD.html
+├── CNAME                    # Custom domain for GitHub Pages
+├── .nojekyll                # Serve files as-is (skip Jekyll)
+└── .github/workflows/
+    └── pages.yml            # Deploy to GitHub Pages on every push to main
 ```
-
-## How content gets here
-
-Both agent repos run on GitHub Actions cron schedules. After each successful
-run, the workflow:
-
-1. Saves the generated HTML to `out/YYYY-MM-DD.html`.
-2. Clones this repo (`j-s-l-7/Jayesh-Luthra`) using the `JAYESH_LUTHRA_PAT`
-   secret it has stored.
-3. Drops the file at `reports/<source>/YYYY-MM-DD.html`.
-4. Updates `reports/manifest.json` (sorted newest-first, deduped).
-5. Commits and pushes to `main`. On push conflict (because both workflows can
-   race), it rebases and retries up to 5 times.
-
-Each agent's report HTML is fully self-contained — it embeds its own `<style>`
-block, so the design of a Leading Indicators report stays Leading Indicators,
-and a Research Agent report stays Research Agent. The landing page never
-restyles their content.
 
 ## Deployment
 
-This repo deploys to **GitHub Pages** via `.github/workflows/pages.yml`. Every
-push to `main` triggers the workflow, which uploads the repo root as a static
-site artifact and publishes it to Pages. The `CNAME` file points the site at
-`jayeshluthra.com`. No build step.
+Every push to `main` runs [`pages.yml`](.github/workflows/pages.yml), which:
 
-`deploy.py` is kept around as a fallback for one-off manual deploys via the
-Vercel REST API.
+1. Copies **only** the public files (`index.html`, `reports/`, `CNAME`, `.nojekyll`) into `_site/`.
+2. Publishes `_site/` to GitHub Pages.
 
-## Required setup (one-time)
+Nothing else in the repo (README, workflows) is ever served. A deploy takes about 30 seconds, and the latest run is shown in the badge above.
 
-1. **Enable Pages** in repo Settings → Pages → Build and deployment → Source:
-   "GitHub Actions". Custom domain auto-detects from the `CNAME` file in the
-   repo root; tick "Enforce HTTPS" once the cert provisions (~10 min).
-2. **DNS** at your registrar — point `jayeshluthra.com` at GitHub Pages:
-   - Apex `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
-     `185.199.111.153`.
-   - Optional `AAAA` (IPv6): `2606:50c0:8000::153`, `2606:50c0:8001::153`,
-     `2606:50c0:8002::153`, `2606:50c0:8003::153`.
-   - `www` CNAME → `j-s-l-7.github.io`.
-3. **Create a GitHub PAT** with `contents: write` scope on this repo
-   (fine-grained, limited to this single repo).
-4. **Add the PAT as `JAYESH_LUTHRA_PAT`** to both agent repos' Actions secrets:
-   - `j-s-l-7/Leading-Indicators` → Settings → Secrets → Actions
-   - `j-s-l-7/Distribution-Research---Analyez` → Settings → Secrets → Actions
+### Hosting setup (already done)
 
-## Local development
+| Setting | Value |
+| --- | --- |
+| Pages source | GitHub Actions |
+| Custom domain | `jayeshluthra.com` (HTTPS enforced) |
+| DNS (GoDaddy) apex `A` | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
+| DNS (GoDaddy) `www` `CNAME` | `j-s-l-7.github.io` |
 
-Open `index.html` directly in a browser (no build step). The JS will fetch
-`reports/manifest.json` from the same directory — if you want to preview with a
-real path layout, run any static server, e.g.:
+## Agent reports
+
+Two automated agents publish daily reports into this repo:
+
+| Agent | Repo | Published at |
+| --- | --- | --- |
+| Leading Indicators | `j-s-l-7/Leading-Indicators` | `jayeshluthra.com/reports/leading-indicators/YYYY-MM-DD.html` |
+| Research Agent | `j-s-l-7/Distribution-Research---Analyez` | `jayeshluthra.com/reports/research-agent/YYYY-MM-DD.html` |
+
+After each run, the agent's workflow uses the `JAYESH_LUTHRA_PAT` secret to commit its report to `reports/<agent>/`, update `reports/manifest.json`, and push to `main`. That push triggers a deploy. Reports are self-contained HTML and keep their own styling.
+
+The homepage does not link to the reports until launch. They are still reachable by direct URL.
+
+## Editing the page
+
+Everything lives in [`index.html`](index.html). To preview locally:
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-then visit `http://localhost:8000/`.
+Commit and push to `main` to go live.
