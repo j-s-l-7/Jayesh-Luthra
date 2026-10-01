@@ -3,98 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Jayesh Luthra — machines in making. Something new is being assembled.">
-    <title>Jayesh Luthra | Mechanics</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <meta name="color-scheme" content="light only">
+    <title>Jayesh Luthra</title>
+    <style>
+        html, body { margin: 0; height: 100%; background: #fff; }
+    </style>
 </head>
-<body>
-    <div class="hero">
-        <div class="container">
-            <h1 class="assembling-text">making machines</h1>
-            <div class="dots-wrapper">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-        </div>
-    </div>
-
-    <section class="machines" aria-label="machines">
-        <div class="machines-grid">
-            <article class="machine-col" id="col-leading-indicators">
-                <header class="machine-head">
-                    <p class="machine-label">01</p>
-                    <h2 class="machine-title">Leading Indicators</h2>
-                    <p class="machine-sub">Reddit signals — early tech &amp; fintech trends</p>
-                </header>
-                <ul class="dates" data-source="leading-indicators">
-                    <li class="dates-empty">No reports yet.</li>
-                </ul>
-            </article>
-
-            <article class="machine-col" id="col-research-agent">
-                <header class="machine-head">
-                    <p class="machine-label">02</p>
-                    <h2 class="machine-title">Research Agent</h2>
-                    <p class="machine-sub">Daily newsletter intelligence digest</p>
-                </header>
-                <ul class="dates" data-source="research-agent">
-                    <li class="dates-empty">No reports yet.</li>
-                </ul>
-            </article>
-        </div>
-    </section>
-
-    <script>
-        (function () {
-            function fmtDate(iso) {
-                // iso: "2026-05-22" → "May 22, 2026"
-                var parts = iso.split('-');
-                if (parts.length !== 3) return iso;
-                var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                var mi = parseInt(parts[1], 10) - 1;
-                if (mi < 0 || mi > 11) return iso;
-                return months[mi] + ' ' + parseInt(parts[2], 10) + ', ' + parts[0];
-            }
-
-            function render(source, entries) {
-                var ul = document.querySelector('ul.dates[data-source="' + source + '"]');
-                if (!ul) return;
-                ul.innerHTML = '';
-                if (!entries || !entries.length) {
-                    var li = document.createElement('li');
-                    li.className = 'dates-empty';
-                    li.textContent = 'No reports yet.';
-                    ul.appendChild(li);
-                    return;
-                }
-                // newest first
-                entries.sort(function (a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); });
-                entries.forEach(function (e) {
-                    var li = document.createElement('li');
-                    var a = document.createElement('a');
-                    a.href = e.path;
-                    a.textContent = fmtDate(e.date);
-                    a.rel = 'noopener';
-                    li.appendChild(a);
-                    ul.appendChild(li);
-                });
-            }
-
-            fetch('reports/manifest.json', { cache: 'no-cache' })
-                .then(function (r) { return r.ok ? r.json() : { 'leading-indicators': [], 'research-agent': [] }; })
-                .then(function (data) {
-                    render('leading-indicators', data['leading-indicators'] || []);
-                    render('research-agent', data['research-agent'] || []);
-                })
-                .catch(function () {
-                    render('leading-indicators', []);
-                    render('research-agent', []);
-                });
-        })();
-    </script>
-</body>
+<body></body>
 </html>
