@@ -4,7 +4,7 @@ import json
 import os
 import ssl
 
-TOKEN = "vca_6sPp7HfBNfmAP0PhtN05vNy0b9JBE6avhcPAIyE9vq2jgO5oSP4M8T2J"
+TOKEN = os.environ["VERCEL_TOKEN"]
 PROJECT_NAME = "jayeshs-personal-site"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
